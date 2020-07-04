@@ -37,11 +37,7 @@ export default {
       userName: '',
       mailAddress: '',
       password: '',
-      db: null,
     };
-  },
-  created: function() {
-    this.db = firebase.firestore();
   },
   methods: {
     signUp: function() {
@@ -55,11 +51,11 @@ export default {
             email: this.mailAddress,
             wallet: 500,
           };
-          this.db
+          firebase
+            .firestore()
             .collection('users')
             .doc(result.user.uid)
             .set(userData)
-            .then(function() {})
             .catch(function(error) {
               alert(error.message);
             });
