@@ -47,7 +47,6 @@ export default {
             .get()
             .then((doc) => {
               const user = doc.data();
-              console.log(user);
               this.$store.commit('setUserId', { userId: user.user_id });
               this.$store.commit('setEmail', { email: user.email });
               this.$store.commit('setName', { name: user.name });
