@@ -5,15 +5,15 @@
     <table>
       <tr>
         <td>メールアドレス</td>
-        <td><input type="text" /></td>
+        <td><input type="text" v-model="mailAddress" /></td>
       </tr>
       <tr>
         <td>パスワード</td>
-        <td><input type="text" /></td>
+        <td><input type="password" v-model="password" /></td>
       </tr>
     </table>
 
-    <div class="signin">
+    <div class="signin" @click="signIn">
       ログイン
     </div>
 
@@ -22,6 +22,48 @@
     </div>
   </div>
 </template>
+
+<script>
+import firebase from 'firebase';
+
+export default {
+  name: 'Signin',
+  data() {
+    return {
+      mailAddress: '',
+      password: '',
+    };
+  },
+  methods: {
+    signIn: function() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.mailAddress, this.password)
+        .then((result) => {
+          firebase
+            .firestore()
+            .collection('users')
+            .doc(result.user.uid)
+            .get()
+            .then((doc) => {
+              const user = doc.data();
+              this.$store.commit('setUserId', { userId: user.user_id });
+              this.$store.commit('setEmail', { email: user.email });
+              this.$store.commit('setName', { name: user.name });
+              this.$store.commit('setWallet', { wallet: user.wallet });
+              alert('Success!');
+            })
+            .catch((error) => {
+              alert(error);
+            });
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    },
+  },
+};
+</script>
 
 <style scoped>
 table {

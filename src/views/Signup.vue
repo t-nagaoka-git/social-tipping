@@ -45,7 +45,7 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.mailAddress, this.password)
         .then((result) => {
-          const userData = {
+          const user = {
             user_id: result.user.uid,
             name: this.userName,
             email: this.mailAddress,
@@ -55,8 +55,14 @@ export default {
             .firestore()
             .collection('users')
             .doc(result.user.uid)
-            .set(userData)
-            .catch(function(error) {
+            .set(user)
+            .then(() => {
+              this.$store.commit('setUserId', { userId: user.user_id });
+              this.$store.commit('setEmail', { email: user.email });
+              this.$store.commit('setName', { name: user.name });
+              this.$store.commit('setWallet', { wallet: user.wallet });
+            })
+            .catch((error) => {
               alert(error.message);
             });
         })
