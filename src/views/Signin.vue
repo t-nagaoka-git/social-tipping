@@ -47,11 +47,10 @@ export default {
             .get()
             .then((doc) => {
               const user = doc.data();
-              this.$store.commit('setUserId', { userId: user.user_id });
-              this.$store.commit('setEmail', { email: user.email });
-              this.$store.commit('setName', { name: user.name });
-              this.$store.commit('setWallet', { wallet: user.wallet });
-              alert('Success!');
+              user.userId = user.user_id;
+              delete user.user_id;
+              this.$store.commit('setUser', user);
+              this.$router.push('/socialtipping');
             })
             .catch((error) => {
               alert(error);
