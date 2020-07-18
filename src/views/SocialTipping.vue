@@ -3,7 +3,7 @@
     <header>
       <div class="username">{{ user.name }} さんようこそ！</div>
       <div class="wallet">残高：{{ user.wallet }}</div>
-      <div class="logout">
+      <div class="logout" @click="logout">
         ログアウト
       </div>
     </header>
@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import firebase from 'firebase';
-
 export default {
   name: 'SocialTipping',
   computed: {
@@ -26,31 +24,9 @@ export default {
     },
   },
   methods: {
-    signIn: function() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.mailAddress, this.password)
-        .then((result) => {
-          firebase
-            .firestore()
-            .collection('users')
-            .doc(result.user.uid)
-            .get()
-            .then((doc) => {
-              const user = doc.data();
-              this.$store.commit('setUserId', { userId: user.user_id });
-              this.$store.commit('setEmail', { email: user.email });
-              this.$store.commit('setName', { name: user.name });
-              this.$store.commit('setWallet', { wallet: user.wallet });
-              alert('Success!');
-            })
-            .catch((error) => {
-              alert(error);
-            });
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+    logout: function() {
+      this.$store.commit('setUser', null);
+      this.$router.push('/');
     },
   },
 };
