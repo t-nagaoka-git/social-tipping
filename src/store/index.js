@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     users: [],
+    isModal: false,
   },
   getters: {
     user(state) {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     users(state) {
       return state.users;
     },
+    isModal(state) {
+      return state.isModal;
+    },
   },
   mutations: {
     setUser(state, user) {
@@ -22,6 +26,9 @@ export default new Vuex.Store({
     },
     setUsers(state, users) {
       state.users = users;
+    },
+    setIsModal(state, isModal) {
+      state.isModal = isModal;
     },
   },
 });
