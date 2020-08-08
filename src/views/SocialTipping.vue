@@ -3,18 +3,43 @@
     <header>
       <div class="username">{{ user.name }} さんようこそ！</div>
       <div class="wallet">残高：{{ user.wallet }}</div>
-      <div class="logout" @click="logout">
-        ログアウト
-      </div>
+      <div class="logout" @click="logout">ログアウト</div>
     </header>
 
     <h1>ユーザー一覧</h1>
+
+    <table>
+      <tr>
+        <th>ユーザー名</th>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr v-for="user in users" :key="user.userId">
+        <td>{{ user.name }}</td>
+        <td class="wallet-btn" @click="openBalanceModal(user)">walletを見る</td>
+        <td class="wallet-btn">送る</td>
+      </tr>
+    </table>
+
+    <Modal v-if="isModal">
+      <template v-slot:name>{{ modalUser.name }}</template>
+      <template v-slot:wallet>{{ modalUser.wallet }}</template>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Modal from "./Modal.vue";
 export default {
-  name: 'SocialTipping',
+  name: "SocialTipping",
+  components: {
+    Modal,
+  },
+  data() {
+    return {
+      modalUser: null,
+    };
+  },
   computed: {
     user() {
       return this.$store.getters.user;
@@ -22,11 +47,18 @@ export default {
     users() {
       return this.$store.getters.users;
     },
+    isModal() {
+      return this.$store.getters.isModal;
+    },
   },
   methods: {
-    logout: function() {
-      this.$store.commit('setUser', null);
-      this.$router.push('/');
+    logout: function () {
+      this.$store.commit("setUser", null);
+      this.$router.push("/");
+    },
+    openBalanceModal(user) {
+      this.modalUser = user;
+      this.$store.commit("setIsModal", true);
     },
   },
 };
@@ -56,5 +88,15 @@ header {
 .logout:hover {
   color: white;
   background: skyblue;
+}
+table {
+  margin: 0 auto;
+}
+.wallet-btn {
+  cursor: pointer;
+  color: white;
+  background: skyblue;
+  padding: 10px;
+  border-radius: 5px;
 }
 </style>
