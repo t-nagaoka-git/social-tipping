@@ -32,6 +32,7 @@ import firebase from "firebase";
 
 export default {
   name: "Modal",
+  props: { socialTippingUser: Object },
   data() {
     return {
       money: 0,
@@ -43,9 +44,6 @@ export default {
     },
     users() {
       return this.$store.getters.users;
-    },
-    socialTippingUser() {
-      return this.$store.getters.socialTippingUser;
     },
     isBalanceModal() {
       return this.$store.getters.isBalanceModal;
@@ -76,23 +74,19 @@ export default {
           wallet:
             parseInt(this.socialTippingUser.wallet) + parseInt(this.money),
         });
-      })
-        .then(() => {
-          const updatedCurrentUser = this.user;
-          updatedCurrentUser.wallet -= this.money;
-          this.$store.commit("setUser", updatedCurrentUser);
-          const updatedUsers = this.users;
-          const updatedSocialTippingUser = updatedUsers.find(
-            (user) => user.userId === this.socialTippingUser.userId
-          );
-          updatedSocialTippingUser.wallet += parseInt(this.money);
-          this.$store.commit("setUsers", updatedUsers);
-          this.$store.commit("setSocialTippingUser", null);
-          this.$store.commit("setIsSocialTippingModal", false);
-        })
-        .catch((error) => {
-          alert(error);
-        });
+        const updatedCurrentUser = this.user;
+        updatedCurrentUser.wallet -= this.money;
+        this.$store.commit("setUser", updatedCurrentUser);
+        const updatedUsers = this.users;
+        const updatedSocialTippingUser = updatedUsers.find(
+          (user) => user.userId === this.socialTippingUser.userId
+        );
+        updatedSocialTippingUser.wallet += parseInt(this.money);
+        this.$store.commit("setUsers", updatedUsers);
+        this.$store.commit("setIsSocialTippingModal", false);
+      }).catch((error) => {
+        alert(error);
+      });
     },
   },
 };

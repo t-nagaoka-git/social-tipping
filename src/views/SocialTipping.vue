@@ -21,7 +21,7 @@
       </tr>
     </table>
 
-    <Modal v-if="isBalanceModal || isSocialTippingModal">
+    <Modal v-if="isBalanceModal || isSocialTippingModal" :socialTippingUser="socialTippingUser">
       <template v-slot:name>{{ modalUser.name }}</template>
       <template v-slot:wallet>{{ modalUser.wallet }}</template>
     </Modal>
@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       modalUser: null,
+      socialTippingUser: null,
     };
   },
   computed: {
@@ -64,7 +65,7 @@ export default {
       this.$store.commit("setIsBalanceModal", true);
     },
     openSocialTippingModal(user) {
-      this.$store.commit("setSocialTippingUser", user);
+      this.socialTippingUser = user;
       this.$store.commit("setIsSocialTippingModal", true);
     },
   },

@@ -7,7 +7,6 @@ export default new Vuex.Store({
   state: {
     user: null,
     users: [],
-    socialTippingUser: null,
     isBalanceModal: false,
     isSocialTippingModal: false,
   },
@@ -17,9 +16,6 @@ export default new Vuex.Store({
     },
     users(state) {
       return state.users;
-    },
-    socialTippingUser(state) {
-      return state.socialTippingUser;
     },
     isBalanceModal(state) {
       return state.isBalanceModal;
@@ -31,9 +27,6 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, user) {
       state.user = user;
-    },
-    setSocialTippingUser(state, socialTippingUser) {
-      state.socialTippingUser = socialTippingUser;
     },
     setUsers(state, users) {
       state.users = users;
