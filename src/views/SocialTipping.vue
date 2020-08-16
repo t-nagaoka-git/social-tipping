@@ -17,11 +17,11 @@
       <tr v-for="user in users" :key="user.userId">
         <td>{{ user.name }}</td>
         <td class="wallet-btn" @click="openBalanceModal(user)">walletを見る</td>
-        <td class="wallet-btn">送る</td>
+        <td class="wallet-btn" @click="openSocialTippingModal(user)">送る</td>
       </tr>
     </table>
 
-    <Modal v-if="isModal">
+    <Modal v-if="isBalanceModal || isSocialTippingModal" :socialTippingUser="socialTippingUser">
       <template v-slot:name>{{ modalUser.name }}</template>
       <template v-slot:wallet>{{ modalUser.wallet }}</template>
     </Modal>
@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       modalUser: null,
+      socialTippingUser: null,
     };
   },
   computed: {
@@ -47,8 +48,11 @@ export default {
     users() {
       return this.$store.getters.users;
     },
-    isModal() {
-      return this.$store.getters.isModal;
+    isBalanceModal() {
+      return this.$store.getters.isBalanceModal;
+    },
+    isSocialTippingModal() {
+      return this.$store.getters.isSocialTippingModal;
     },
   },
   methods: {
@@ -58,7 +62,11 @@ export default {
     },
     openBalanceModal(user) {
       this.modalUser = user;
-      this.$store.commit("setIsModal", true);
+      this.$store.commit("setIsBalanceModal", true);
+    },
+    openSocialTippingModal(user) {
+      this.socialTippingUser = user;
+      this.$store.commit("setIsSocialTippingModal", true);
     },
   },
 };
